@@ -1,0 +1,115 @@
+<html>
+<body>
+<script>
+/**** Five-starred Red Flag****/
+/****   Author: jason.su   ****/
+/****    Date:2023-3-22   ****/
+
+var canvas = document.createElement("canvas");
+var canvas_width  = 600;
+var canvas_height = 400;
+with(canvas){
+	width =canvas_width;
+	height=canvas_height;
+}
+var ctx = canvas.getContext("2d");
+document.body.appendChild(canvas);
+
+function countAngle(tan){
+	var radian = Math.atan(tan); 
+	return Math.round(radian * 180 / Math.PI) - 54; 
+}
+
+function drawFlag(){
+	ctx.fillStyle = "red";
+	ctx.fillRect(0,0,canvas_width,canvas_height);
+
+}
+
+function clearCanvas(){
+	ctx.clearRect(0, 0, canvas_width, canvas_height);
+}
+
+function drawPentagram(x, y, r, angle, color){
+
+	var points = [];
+	var degree = 2 * Math.PI / 360;
+	angle += 36;
+	for(let i=0;i<5;i++){
+		point_x = Math.round(x + r * Math.sin((angle + 72 * i) * degree)); 
+		point_y = Math.round(y + r * Math.cos((angle + 72 * i) * degree));
+		points[i] = {"x":point_x, "y":point_y};
+	//	console.log("x="+points[i].x+";y="+points[i].y);
+	}
+
+	ctx.fillStyle = color;
+	ctx.strokeStyle = "yellow";
+
+	ctx.beginPath();
+
+	ctx.moveTo(points[2].x, points[2].y);
+	ctx.lineTo(points[0].x, points[0].y);
+	ctx.lineTo(points[3].x, points[3].y);
+	ctx.lineTo(points[1].x, points[1].y);
+	ctx.lineTo(points[4].x, points[4].y);
+	
+	ctx.closePath();
+	ctx.stroke();
+
+	ctx.fill();
+
+}
+
+function drawNationalFlag(){
+	unit = canvas_height / 20;
+	big_star_x = big_star_y = unit * 5;
+	small_stars = [
+		{
+			"x":10 * unit,
+			"y":02 * unit,
+			"radius":unit,
+			"angle": countAngle(3/5)
+		},
+
+		{
+			"x":12 * unit,
+			"y":04 * unit,
+			"radius":unit,
+			"angle": countAngle(1/7)
+		},
+
+		{
+			"x":12 * unit,
+			"y":07 * unit,
+			"radius":unit,
+			"angle": countAngle(-2/7)
+		},
+
+		{
+			"x":10 * unit,
+			"y":09 * unit,
+			"radius":unit,
+			"angle": countAngle(-4/5)
+		}
+	];
+
+	/* test values
+ 	for(key in small_stars){
+		for(key2 in small_stars[key]){
+			console.log(key + "-" + key2 + "=" + small_stars[key][key2]);
+		}
+	}
+	*/
+
+	big_start_radius = unit * 3;
+	drawFlag();
+	drawPentagram(big_star_x, big_star_y, big_start_radius, 0, "yellow");
+	small_stars.forEach((smallstar)=>{
+			drawPentagram(smallstar["x"], smallstar["y"],smallstar["radius"], smallstar["angle"], "yellow");
+		}
+	);
+}
+drawNationalFlag();
+</script>
+</body>
+</html>
